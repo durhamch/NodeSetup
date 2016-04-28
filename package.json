@@ -1,0 +1,17 @@
+{
+  "name": "web-crawler",
+  "version": "1.0.0",
+  "description": "Web crawler for OSU CS-419",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 1"
+  },
+  "author": "cwd",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.2",
+    "express-session": "^1.11.3",
+    "body-parser": "^1.13.3",
+    "express-handlebars": "^3.0.0"
+  }
+}
