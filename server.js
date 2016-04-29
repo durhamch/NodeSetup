@@ -5,11 +5,12 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 55433);
+app.set('port', 3000);
 
 //app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(bodyParser.json());
-
+//__dirname = path.resolve();
+app.use(express.static(__dirname + '/views/layouts'));
 
 app.get('/', function(req, res) {
     console.log('website accessed');

@@ -12,6 +12,7 @@
     "express": "^4.13.2",
     "express-session": "^1.11.3",
     "body-parser": "^1.13.3",
-    "express-handlebars": "^3.0.0"
+    "express-handlebars": "^3.0.0",
+    "materialize-css": "0.97.6"
   }
 }
