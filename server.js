@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var http = require('http');
+var functions = require('./functions');
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -13,7 +14,6 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/views/layouts'));
 
 app.get('/', function(req, res) {
-    console.log('website accessed');
     res.render('home');
 });
 
@@ -24,10 +24,20 @@ app.get('/', function(req, res) {
  * start = webCrawlURL
  */
 app.post('/', function(req, res) {
-	var crawlURL 	= req.body.webCrawlURL;
-	var crawlDepth  = req.body.crawlDepth;
-	var pageNum 	= req.body.pagesToCrawl; 
+	var crawlURL 			= req.body.webCrawlURL;
+	var crawlDepth  		= req.body.crawlDepth;
+	var pageNum 			= req.body.pagesToCrawl; 
+	var getDateTime			= functions.getDateTime();
 
+	if(functions.validateUrl(crawlURL)) {
+		console.log("Valid url." + crawlURL);
+	}
+	else {
+		console.log("Invalid url." + crawlURL);
+	}
+
+	console.log("**********");	// beginning of post call
+	console.log("Call made at : " + getDateTime);
 	console.log("URL: " + crawlURL);
 	console.log("Crawl Depth: " + crawlDepth);
 	console.log("Page number: " + pageNum);
@@ -39,17 +49,15 @@ app.post('/', function(req, res) {
 		method: 'GET',
 	};
  
-	console.log(optionsget);
-	console.log('Making GET call');
+	console.log('=== Making GET call ===');
 	 
 	// do the GET request
 	var reqGet = http.request(optionsget, function(res) {
-	    console.log("statusCode: ", res.statusCode);
+//	    console.log("statusCode: ", res.statusCode);
 
 	    res.on('data', function(d) {
-		console.info('GET result:\n');
+		console.log('GET result:');
 		process.stdout.write(d);
-		console.info('\n\nCall completed');
 	    });
 	 
 	});
@@ -58,6 +66,7 @@ app.post('/', function(req, res) {
 	reqGet.on('error', function(e) {
 	    console.error(e);
 	});
+	
 
 	// this to be replaced with visualization
 	res.render('home');
