@@ -1,0 +1,10 @@
+<div id="output">
+	<h2>Links Visited</h2>
+	<ul class="links_visited">
+		{{each website}}
+			<li>{{this.depth}}</li>
+		{{else}}
+			<span>No content</span>
+		{{/each}}
+	</ul>
+</div>
