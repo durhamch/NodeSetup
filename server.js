@@ -52,11 +52,12 @@ app.post('/', function(req, res) {
 	console.log('=== Making GET call ===');
 	 
 	// do the GET request
-	var reqGet = http.request(optionsget, function(res) {
-//	    console.log("statusCode: ", res.statusCode);
-
+	var website = {};
+	var reqGet = http.request(optionsget, function(res) {	
+	
 	    res.on('data', function(d) {
 		console.log('GET result:');
+		website = d;
 		process.stdout.write(d);
 	    });
 	 
@@ -67,9 +68,8 @@ app.post('/', function(req, res) {
 	    console.error(e);
 	});
 	
-
 	// this to be replaced with visualization
-	res.render('home');
+//	res.render('crawl', website);
 });
 
 app.listen(app.get('port'), function() {
