@@ -13,8 +13,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/views/layouts'));
 
-app.get('/', function(req, res) {
-    res.render('home');
+var sampleResponse = {
+	"root":"http://web.engr.oregonstate.edu/~sakamosa/htmlgenerator/",
+	"links":15,
+	"http://web.engr.oregonstate.edu/~sakamosa/htmlgenerator/":["https://basecamp.com/","https://github.com/basecamp/trix","http://www.dirtymarkup.com/"],
+	"https://basecamp.com/":["https://basecamp.com/3/features","https://basecamp.com/3/pricing","https://basecamp.com/support","https://basecamp.com/3/clientside","https://basecamp.com/about","https://basecamp.com/signup","https://3.basecamp.com/hello","https://basecamp.com/3/new","mailto:jason@basecamp.com","https://thedistance.com/","https://signalvnoise.com/"],
+	"https://basecamp.com/3/features":[],
+	"https://basecamp.com/3/pricing":[],
+	"https://basecamp.com/support":[],
+	"https://basecamp.com/3/clientside":[],
+	"https://basecamp.com/about":[],
+	"https://basecamp.com/signup":[],
+	"https://3.basecamp.com/hello":[],
+	"https://basecamp.com/3/new":[],
+	"mailto:jason@basecamp.com":[],
+	"https://thedistance.com/":[],
+	"https://signalvnoise.com/":[],
+	"https://github.com/basecamp/trix":[],
+	"http://www.dirtymarkup.com/":[]
+}
+
+app.get('/', function(req, res, next) {
+	res.render('home');
 });
 
 /*
@@ -23,7 +43,7 @@ app.get('/', function(req, res) {
  * depth = crawlDepth
  * start = webCrawlURL
  */
-app.post('/', function(req, res) {
+app.post('/', function(req, res, next) {
 	var crawlURL 			= req.body.webCrawlURL;
 	var crawlDepth  		= req.body.crawlDepth;
 	var pageNum 			= req.body.pagesToCrawl; 
@@ -35,42 +55,27 @@ app.post('/', function(req, res) {
 	else {
 		console.log("Invalid url." + crawlURL);
 	}
-
-	console.log("**********");	// beginning of post call
-	console.log("Call made at : " + getDateTime);
-	console.log("URL: " + crawlURL);
-	console.log("Crawl Depth: " + crawlDepth);
-	console.log("Page number: " + pageNum);
-
+	
 	// make our GET request
 	var optionsget = {
 		host: 'capstone-crawler.appspot.com',
 		path: '/crawler?pages=' + pageNum + '&depth=' + crawlDepth + '&start=' + crawlURL,
 		method: 'GET',
+		headers: { 'Content-Type': 'application/json' }
 	};
  
-	console.log('=== Making GET call ===');
 	 
-	// do the GET request
-	var website = {};
-	var reqGet = http.request(optionsget, function(res) {	
-	
-	    res.on('data', function(d) {
-		console.log('GET result:');
-		website = d;
-		process.stdout.write(d);
-	    });
-	 
-	});
-	 
-	reqGet.end();
-	reqGet.on('error', function(e) {
-	    console.error(e);
-	});
 	
 	// this to be replaced with visualization
-//	res.render('crawl', website);
+
+	res.render('crawl');//, receivedResponse);
 });
+
+app.get('/crawl', function(req, res, next) {
+	console.log(receivedResponse);
+	res.render('crawl', receivedResponse);
+	res.end();
+}); 
 
 app.listen(app.get('port'), function() {
     console.log('Express started on http://localhost:' + app.get('port'));
